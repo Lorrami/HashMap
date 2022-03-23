@@ -1,0 +1,6 @@
+[submodule "LinkedList"]
+	path = LinkedList
+	url = git@github.com:Lorrami/LinkedList.git
+[submodule "Vector"]
+	path = Vector
+	url = git@github.com:Lorrami/Vector.git
