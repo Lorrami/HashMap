@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector/Vector.h"
+#include "LinkedList/LinkedList.h"
 
 template <typename Key, typename Value>
 struct HashMap {
@@ -11,7 +12,7 @@ private:
     };
 
     int m_Capacity = 5;
-    Node **m_Table = nullptr;
+    LinkedList<Node> **m_Table = nullptr;
 public:
     HashMap();
     //~HashMap();
@@ -23,7 +24,7 @@ public:
 
 template<typename Key, typename Value>
 HashMap<Key, Value>::HashMap() {
-    m_Table = new Node*[m_Capacity];
+    m_Table = new LinkedList<Node>*[m_Capacity];
     for(int i = 0; i < m_Capacity; i++)
         m_Table[i] = nullptr;
 }
@@ -39,11 +40,14 @@ void HashMap<Key, Value>::Add(Key key, Value value) {
     std::hash<Key> hasher;
     size_t hash = hasher(key) % m_Capacity;
 
-    Node *newNode = new Node();
+    auto *nodesCollection = new LinkedList<Node>;
+
+    Node *newNode = new Node;
     newNode->key = key;
     newNode->value = value;
+    nodesCollection->Add(*newNode);
 
-    m_Table[hash] = newNode;
+    m_Table[hash] = nodesCollection;
 }
 
 template<typename Key, typename Value>
@@ -67,8 +71,10 @@ template<typename Key, typename Value>
 void HashMap<Key, Value>::Print() {
     for (int i = 0; i < m_Capacity; i++)
     {
-        if(m_Table[i])
-            std::cout << m_Table[i]->key << " --> " << m_Table[i]->value << std::endl;
+        if(m_Table[i]) {
+            for (auto it = m_Table[i].begin(); it != m_Table[i].end(); ++it)
+                std::cout << it->key << " --> " << it->value << std::endl;
+        }
         else
             std::cout << "nullptr" << std::endl;
     }
