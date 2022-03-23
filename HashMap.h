@@ -26,7 +26,7 @@ template<typename Key, typename Value>
 HashMap<Key, Value>::HashMap() {
     m_Table = new LinkedList<Node>*[m_Capacity];
     for(int i = 0; i < m_Capacity; i++)
-        m_Table[i] = nullptr;
+        m_Table[i] = new LinkedList<Node>;
 }
 
 /*template<typename Key, typename Value>
@@ -40,14 +40,10 @@ void HashMap<Key, Value>::Add(Key key, Value value) {
     std::hash<Key> hasher;
     size_t hash = hasher(key) % m_Capacity;
 
-    auto *nodesCollection = new LinkedList<Node>;
-
     Node *newNode = new Node;
     newNode->key = key;
     newNode->value = value;
-    nodesCollection->Add(*newNode);
-
-    m_Table[hash] = nodesCollection;
+    m_Table[hash]->Add(*newNode);
 }
 
 template<typename Key, typename Value>
