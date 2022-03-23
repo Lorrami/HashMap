@@ -65,7 +65,7 @@ template<typename Key, typename Value>
 void HashMap<Key, Value>::Print() {
     for (int i = 0; i < m_Capacity; i++) {
         if (m_Table[i].Size() > 0) {
-            for (auto it = m_Table[i].begin(); it != m_Table[i].end() - 1; ++it) {
+            for (auto it = m_Table[i].begin(); it != m_Table[i].end(); ++it) {
                 std::cout << it->key << " --> " << it->value << "  ";
             }
         }
