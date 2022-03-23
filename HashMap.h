@@ -12,7 +12,7 @@ private:
     };
 
     int m_Capacity = 5;
-    LinkedList<Node> **m_Table = nullptr;
+    LinkedList<Node> *m_Table = nullptr;
 public:
     HashMap();
     //~HashMap();
@@ -24,9 +24,7 @@ public:
 
 template<typename Key, typename Value>
 HashMap<Key, Value>::HashMap() {
-    m_Table = new LinkedList<Node>*[m_Capacity];
-    for(int i = 0; i < m_Capacity; i++)
-        m_Table[i] = new LinkedList<Node>;
+    m_Table = new LinkedList<Node>[m_Capacity];
 }
 
 /*template<typename Key, typename Value>
@@ -43,7 +41,7 @@ void HashMap<Key, Value>::Add(Key key, Value value) {
     Node *newNode = new Node;
     newNode->key = key;
     newNode->value = value;
-    m_Table[hash]->Add(*newNode);
+    m_Table[hash].Add(*newNode);
 }
 
 template<typename Key, typename Value>
@@ -65,11 +63,11 @@ Value &HashMap<Key, Value>::Find(Key key) {
 
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Print() {
-    for (int i = 0; i < m_Capacity; i++)
-    {
-        if(m_Table[i]) {
-            for (auto it = m_Table[i].begin(); it != m_Table[i].end(); ++it)
-                std::cout << it->key << " --> " << it->value << std::endl;
+    for (int i = 0; i < m_Capacity; i++) {
+        if (m_Table[i].Size() > 0) {
+            for (auto it = m_Table[i].begin(); it != m_Table[i].end() - 1; ++it) {
+                std::cout << it->key << " --> " << it->value << "  ";
+            }
         }
         else
             std::cout << "nullptr" << std::endl;
