@@ -67,10 +67,12 @@ void HashMap<Key, Value>::Remove(Key key) {
 
     if (m_Table[hash].Size() > 1) {
         auto tmp = m_Table[hash].begin();
-        for (auto it = m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
+        for (auto it = ++m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
             if (it->key == key) {
                 m_Table[hash].RemoveAfter(tmp);
-                Remove(key);
+                //Remove(key);
+                m_Size--;
+                break;
             }
             else
                 tmp = it;
@@ -78,6 +80,8 @@ void HashMap<Key, Value>::Remove(Key key) {
     }
     if (m_Table[hash].Size() == 1) {
         if (m_Table[hash].begin()->key == key) {
+            std::cout << "First delited" << std::endl;
+            m_Size--;
             m_Table[hash] = LinkedList<Node>();
         }
     }
