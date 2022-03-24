@@ -4,3 +4,6 @@
 [submodule "Vector"]
 	path = Vector
 	url = git@github.com:Lorrami/Vector.git
+[submodule "Hash"]
+	path = Hash
+	url = git@github.com:Lorrami/Hash.git

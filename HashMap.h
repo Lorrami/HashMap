@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LinkedList/LinkedList.h"
+#include "Hash/Hash.h"
 
 template <typename Key, typename Value>
 struct HashMap {
