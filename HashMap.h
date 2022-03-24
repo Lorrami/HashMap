@@ -1,7 +1,16 @@
 #pragma once
 
 #include "LinkedList/LinkedList.h"
-#include "Hash/Hash.h"
+
+template <class Type>
+struct Hash {
+public:
+    explicit Hash() = default;
+
+    static Type Hasher(Type value) {
+        return value * 4389103 + 58920;
+    }
+};
 
 template <typename Key, typename Value>
 struct HashMap {
@@ -40,8 +49,8 @@ void HashMap<Key, Value>::AddMemory() {
     m_Table = new LinkedList<Node>[m_Capacity];
     for (auto i = 0; i < m_Size; ++i) {
         for (auto it : tmp[i]) {
-            std::hash<Key> hasher;
-            size_t hash = hasher(it.key) % m_Capacity;
+            Hash<Key> hasher;
+            size_t hash = hasher.Hasher(it.key) % m_Capacity;
             m_Table[hash].Add(it);
         }
     }
@@ -51,8 +60,8 @@ template<typename Key, typename Value>
 void HashMap<Key, Value>::Add(Key key, Value value) {
     if (m_Size >= m_Capacity)
         AddMemory();
-    std::hash<Key> hasher;
-    size_t hash = hasher(key) % m_Capacity;
+    Hash<Key> hasher;
+    size_t hash = hasher.Hasher(key) % m_Capacity;
 
     Node newNode = Node();
     newNode.key = key;
@@ -63,8 +72,8 @@ void HashMap<Key, Value>::Add(Key key, Value value) {
 }
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Remove(Key key) {
-    std::hash<Key> hasher;
-    size_t hash = hasher(key) % m_Capacity;
+    Hash<Key> hasher;
+    size_t hash = hasher.Hasher(key) % m_Capacity;
     bool isFirstDeleted = false;
 
     if (m_Table[hash].Size() > 0) {
@@ -90,8 +99,8 @@ void HashMap<Key, Value>::Remove(Key key) {
 }
 template<typename Key, typename Value>
 Value &HashMap<Key, Value>::Find(Key key) {
-    std::hash<Key> hasher;
-    size_t hash = hasher(key) % m_Capacity;
+    Hash<Key> hasher;
+    size_t hash = hasher.Hasher(key) % m_Capacity;
 
     for (auto it = ++m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
         if (it->key == key)
