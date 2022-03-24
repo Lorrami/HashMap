@@ -1,16 +1,26 @@
 #pragma once
 
 #include "LinkedList/LinkedList.h"
+#include <string>
 
 template <class Type>
 struct Hash {
 public:
     explicit Hash() = default;
-
-    static Type Hasher(Type value) {
+    static size_t Hasher(Type value) {
         return value * 4389103 + 58920;
     }
 };
+template<>
+struct Hash<std::string> {
+    explicit Hash() = default;
+    static size_t Hasher(std::string value) {
+        auto i = std::stoi(value);
+        return i * 4389103 + 58920;
+    }
+};
+
+
 
 template <typename Key, typename Value>
 struct HashMap {
@@ -36,6 +46,7 @@ private:
 
 template<typename Key, typename Value>
 HashMap<Key, Value>::HashMap() {
+    static_assert(!std::is_same<Key, float>(), "You can't create the hash table with float key");
     m_Table = new LinkedList<Node>[m_Capacity];
 }
 template<typename Key, typename Value>
@@ -49,8 +60,7 @@ void HashMap<Key, Value>::AddMemory() {
     m_Table = new LinkedList<Node>[m_Capacity];
     for (auto i = 0; i < m_Size; ++i) {
         for (auto it : tmp[i]) {
-            Hash<Key> hasher;
-            size_t hash = hasher.Hasher(it.key) % m_Capacity;
+            size_t hash = Hash<Key>::Hasher(it.key) % m_Capacity;
             m_Table[hash].Add(it);
         }
     }
@@ -60,8 +70,7 @@ template<typename Key, typename Value>
 void HashMap<Key, Value>::Add(Key key, Value value) {
     if (m_Size >= m_Capacity)
         AddMemory();
-    Hash<Key> hasher;
-    size_t hash = hasher.Hasher(key) % m_Capacity;
+    size_t hash = Hash<Key>::Hasher(key) % m_Capacity;
 
     Node newNode = Node();
     newNode.key = key;
@@ -72,8 +81,7 @@ void HashMap<Key, Value>::Add(Key key, Value value) {
 }
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Remove(Key key) {
-    Hash<Key> hasher;
-    size_t hash = hasher.Hasher(key) % m_Capacity;
+    size_t hash = Hash<Key>::Hasher(key) % m_Capacity;
     bool isFirstDeleted = false;
 
     if (m_Table[hash].Size() > 0) {
@@ -99,8 +107,7 @@ void HashMap<Key, Value>::Remove(Key key) {
 }
 template<typename Key, typename Value>
 Value &HashMap<Key, Value>::Find(Key key) {
-    Hash<Key> hasher;
-    size_t hash = hasher.Hasher(key) % m_Capacity;
+    size_t hash = Hash<Key>::Hasher(key) % m_Capacity;
 
     for (auto it = ++m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
         if (it->key == key)
