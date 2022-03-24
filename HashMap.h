@@ -17,7 +17,7 @@ private:
     void AddMemory();
 public:
     HashMap();
-    //~HashMap();
+    ~HashMap();
     void Add(Key key, Value value);
     void Remove(Key key);
     Value &Find(Key key);
@@ -28,11 +28,10 @@ template<typename Key, typename Value>
 HashMap<Key, Value>::HashMap() {
     m_Table = new LinkedList<Node>[m_Capacity];
 }
-/*template<typename Key, typename Value>
+template<typename Key, typename Value>
 HashMap<Key, Value>::~HashMap() {
-    delete[] Map;
-
-}*/
+    delete[] m_Table;
+}
 template <typename Key, typename Value>
 void HashMap<Key, Value>::AddMemory() {
     m_Capacity *= 2;
