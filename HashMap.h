@@ -18,7 +18,7 @@ public:
     void Print();
 private:
     int m_Capacity = 3;
-    int m_Size = m_Capacity;
+    int m_Size = 3;
     LinkedList<Node> *m_Table = nullptr;
 private:
     void AddMemory();
@@ -66,17 +66,27 @@ void HashMap<Key, Value>::Remove(Key key) {
     std::hash<Key> hasher;
     size_t hash = hasher(std::move(key)) % m_Capacity;
 
-    delete m_Table[hash];
-    m_Table[hash] = nullptr;
-
-    m_Size--;
+    if (m_Table[hash].Size() > 1) {
+        std::cout << "Bigger than 1" << std::endl;
+        for (auto it = m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
+            if (it->key == key) {
+                m_Table[hash].RemoveAfter(it);
+                break;
+            }
+        }
+    }
+    else if (m_Table[hash].Size() == 1) {
+            if (m_Table[hash].begin()->key == key) {
+                m_Table[hash] = LinkedList<Node>();
+            }
+        }
 }
 template<typename Key, typename Value>
 Value &HashMap<Key, Value>::Find(Key key) {
     std::hash<Key> hasher;
     size_t hash = hasher(std::move(key)) % m_Capacity;
 
-    return m_Table[hash]->value;
+    return "chel";//m_Table[hash]->value;
 }
 template <typename Key, typename Value>
 void HashMap<Key, Value>::Print() {
@@ -87,7 +97,5 @@ void HashMap<Key, Value>::Print() {
             }
             std::cout << std::endl;
         }
-        else
-            std::cout << "nullptr" << std::endl;
     }
 }
