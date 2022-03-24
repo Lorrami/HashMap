@@ -5,10 +5,10 @@ int main()
 {
     HashMap<int, std::string> Map;
 
-    for (int i = 0; i < 256; i++) {
+    for (int i = 0; i < 1000; i++) {
         Map.Add(i, "Test");
     }
-    for (int i = 0; i < 256; i++) {
+    for (int i = 0; i < 1000; i++) {
         Map.Remove(i);
     }
     Map.Print();

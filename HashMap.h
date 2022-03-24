@@ -48,38 +48,40 @@ void HashMap<Key, Value>::AddMemory() {
 }
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Add(Key key, Value value) {
-    std::hash<Key> hasher;
-    size_t hash = hasher(std::move(key)) % m_Capacity;
-
     if (m_Size >= m_Capacity)
         AddMemory();
+    std::hash<Key> hasher;
+    size_t hash = hasher(key) % m_Capacity;
 
-    Node *newNode = new Node;
-    newNode->key = std::move(key);
-    newNode->value = std::move(value);
-    m_Table[hash].Add(*newNode);
+    Node newNode = Node();
+    newNode.key = key;
+    newNode.value = value;
+    m_Table[hash].Add(newNode);
 
     m_Size++;
 }
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Remove(Key key) {
     std::hash<Key> hasher;
-    size_t hash = hasher(std::move(key)) % m_Capacity;
+    size_t hash = hasher(key) % m_Capacity;
 
     if (m_Table[hash].Size() > 1) {
         std::cout << "Bigger than 1" << std::endl;
+        auto tmp = m_Table[hash].begin();
         for (auto it = m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
             if (it->key == key) {
-                m_Table[hash].RemoveAfter(it);
+                m_Table[hash].RemoveAfter(tmp);
                 break;
             }
+            else
+                tmp = it;
         }
     }
-    else if (m_Table[hash].Size() == 1) {
-            if (m_Table[hash].begin()->key == key) {
-                m_Table[hash] = LinkedList<Node>();
-            }
+    if (m_Table[hash].Size() == 1) {
+        if (m_Table[hash].begin()->key == key) {
+            m_Table[hash] = LinkedList<Node>();
         }
+    }
 }
 template<typename Key, typename Value>
 Value &HashMap<Key, Value>::Find(Key key) {
