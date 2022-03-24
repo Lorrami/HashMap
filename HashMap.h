@@ -49,14 +49,14 @@ void HashMap<Key, Value>::AddMemory() {
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Add(Key key, Value value) {
     std::hash<Key> hasher;
-    size_t hash = hasher(key) % m_Capacity;
+    size_t hash = hasher(std::move(key)) % m_Capacity;
 
     if (m_Size >= m_Capacity)
         AddMemory();
 
     Node *newNode = new Node;
-    newNode->key = key;
-    newNode->value = value;
+    newNode->key = std::move(key);
+    newNode->value = std::move(value);
     m_Table[hash].Add(*newNode);
 
     m_Size++;
@@ -64,7 +64,7 @@ void HashMap<Key, Value>::Add(Key key, Value value) {
 template<typename Key, typename Value>
 void HashMap<Key, Value>::Remove(Key key) {
     std::hash<Key> hasher;
-    size_t hash = hasher(key) % m_Capacity;
+    size_t hash = hasher(std::move(key)) % m_Capacity;
 
     delete m_Table[hash];
     m_Table[hash] = nullptr;
@@ -74,7 +74,7 @@ void HashMap<Key, Value>::Remove(Key key) {
 template<typename Key, typename Value>
 Value &HashMap<Key, Value>::Find(Key key) {
     std::hash<Key> hasher;
-    size_t hash = hasher(key) % m_Capacity;
+    size_t hash = hasher(std::move(key)) % m_Capacity;
 
     return m_Table[hash]->value;
 }
