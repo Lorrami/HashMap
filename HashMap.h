@@ -66,12 +66,11 @@ void HashMap<Key, Value>::Remove(Key key) {
     size_t hash = hasher(key) % m_Capacity;
 
     if (m_Table[hash].Size() > 1) {
-        std::cout << "Bigger than 1" << std::endl;
         auto tmp = m_Table[hash].begin();
         for (auto it = m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
             if (it->key == key) {
                 m_Table[hash].RemoveAfter(tmp);
-                break;
+                Remove(key);
             }
             else
                 tmp = it;
