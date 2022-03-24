@@ -9,12 +9,6 @@ private:
         Key key;
         Value value;
     };
-
-    int m_Capacity = 3;
-    int m_Size = m_Capacity;
-    LinkedList<Node> *m_Table = nullptr;
-
-    void AddMemory();
 public:
     HashMap();
     ~HashMap();
@@ -22,6 +16,12 @@ public:
     void Remove(Key key);
     Value &Find(Key key);
     void Print();
+private:
+    int m_Capacity = 3;
+    int m_Size = m_Capacity;
+    LinkedList<Node> *m_Table = nullptr;
+private:
+    void AddMemory();
 };
 
 template<typename Key, typename Value>
