@@ -64,34 +64,38 @@ template<typename Key, typename Value>
 void HashMap<Key, Value>::Remove(Key key) {
     std::hash<Key> hasher;
     size_t hash = hasher(key) % m_Capacity;
+    bool isFirstDeleted = false;
 
-    if (m_Table[hash].Size() > 1) {
-        auto tmp = m_Table[hash].begin();
-        for (auto it = ++m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
-            if (it->key == key) {
-                m_Table[hash].RemoveAfter(tmp);
-                //Remove(key);
-                m_Size--;
-                break;
-            }
-            else
-                tmp = it;
-        }
-    }
-    if (m_Table[hash].Size() == 1) {
+    if (m_Table[hash].Size() > 0) {
         if (m_Table[hash].begin()->key == key) {
             std::cout << "First delited" << std::endl;
             m_Size--;
             m_Table[hash] = LinkedList<Node>();
+            isFirstDeleted = true;
+        }
+        if (!isFirstDeleted) {
+            auto tmp = m_Table[hash].begin();
+            for (auto it = ++m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
+                if (it->key == key) {
+                    m_Table[hash].RemoveAfter(tmp);
+                    //Remove(key);
+                    m_Size--;
+                    break;
+                } else
+                    tmp = it;
+            }
         }
     }
 }
 template<typename Key, typename Value>
 Value &HashMap<Key, Value>::Find(Key key) {
     std::hash<Key> hasher;
-    size_t hash = hasher(std::move(key)) % m_Capacity;
+    size_t hash = hasher(key) % m_Capacity;
 
-    return "chel";//m_Table[hash]->value;
+    for (auto it = ++m_Table[hash].begin(); it != m_Table[hash].end(); ++it) {
+        if (it->key == key)
+            return it->value;
+    }
 }
 template <typename Key, typename Value>
 void HashMap<Key, Value>::Print() {
@@ -101,6 +105,8 @@ void HashMap<Key, Value>::Print() {
                 std::cout << it->key << " --> " << it->value << "  ";
             }
             std::cout << std::endl;
+        } else {
+            std::cout << "Empty" << std::endl;
         }
     }
 }
