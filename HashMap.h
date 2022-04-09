@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LinkedList/LinkedList.h"
+#include "../LinkedList/LinkedList.h"
 #include <string>
 
 template <class Type>
