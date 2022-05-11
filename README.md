@@ -1,2 +1,2 @@
 # HashMap
-My own C++ Vector implementation
+My own C++ HashMap implementation
